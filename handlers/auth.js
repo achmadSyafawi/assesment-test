@@ -1,6 +1,6 @@
 const express = require('express');
-
-function authController(auth) {
+const Promise = require('bluebird');
+function authHandler(auth) {
     const authRouter = express.Router();
     authRouter.post('/', (req, res) => {
         const { username, password } = req.body;
@@ -11,7 +11,7 @@ function authController(auth) {
                 res.status(401).json({ message: err.message });
         });
     });
-    authRouter.post('/', (req, res) => {
+    authRouter.post('/cekToken', (req, res) => {
         const token = req.body.token;
         auth
             .cekToken(token)
@@ -23,4 +23,4 @@ function authController(auth) {
     return authRouter;
 }
 
-module.exports = authController;
+module.exports = authHandler;

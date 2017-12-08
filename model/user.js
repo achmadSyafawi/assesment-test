@@ -1,16 +1,15 @@
-
 function createUserModel(dbConnection) {
     return {
     viewAllUsers: () =>
         new Promise((resolve, reject) => {
-            conn.query('SELECT * FROM users', (err, result) => {
+            dbConnection.query('SELECT * FROM users', (err, result) => {
                 if (err) reject(err);
                 resolve(result);
             });
         }),
     getUser: id =>
         new Promise((resolve, reject) => {
-            conn.query(
+            dbConnection.query(
                 `SELECT * FROM users WHERE id = ${id}`,
                 (err, result) => {
                     if (err) reject(err);
@@ -20,9 +19,9 @@ function createUserModel(dbConnection) {
         }),
     createUser: data =>
         new Promise((resolve, reject) => {
-            conn.query(
+            dbConnection.query(
                 'INSERT INTO users SET ?',
-                Object.assign({}, { id: null }, data),
+                Object.assign({}, data),
                 (err, result) => {
                     if (err) reject(err);
                     resolve(result);
@@ -31,7 +30,7 @@ function createUserModel(dbConnection) {
         }),
     delUser: id =>
         new Promise((resolve, reject) => {
-            conn.query(
+            dbConnection.query(
                 `DELETE FROM users WHERE id = ${id}`,
                 (err, result) => {
                     if (err) reject(err);
@@ -41,8 +40,8 @@ function createUserModel(dbConnection) {
         }),
     updateUser: (id, user) => {
         const { name, username, password } = user;
-        return new Promise((resolve, reject) => {
-            conn.query(
+        new Promise((resolve, reject) => {
+            dbConnection.query(
                 'UPDATE users SET name = ?, username = ?, password = ? WHERE id = ?',
                 [name, username, password, id],
                 (err, result) => {
@@ -53,5 +52,5 @@ function createUserModel(dbConnection) {
         });
     },
 };
-
+}
 module.exports = createUserModel;

@@ -2,7 +2,10 @@ const express = require('express');
 const Promise = require('bluebird');
 
 function formatOutput(data, res) {
-    return res.json(data);
+    return res.json({
+        message: data ? 'success' : 'failed',
+        data,
+    });
 }
 
 function createUserHandler(userModel) {
@@ -24,14 +27,13 @@ function createUserHandler(userModel) {
             username: req.body.username,
             password: req.body.password,
         };
-        Promise.all([
-            user.createUser(data),
-        ])
-            .spread(() => res.json({ message: 'sukses' }))
+            userModel
+            .createUser(data)
+            .then(result => formatOutput(result))
             .catch(err => formatOutput(err, res));
     });
     userRouter.delete('/:id', (req, res) => {
-        user
+        userModel
         .delUser(req.params.id)
         .then(result => formatOutput(result, res))
         .catch(err => formatOutput(err, res));

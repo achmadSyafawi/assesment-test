@@ -16,12 +16,12 @@ const userModel = createUserModel(dbConnection);
 const authModel = createAuthModel(dbConnection);
 // Define handlers
 const userHandler = createUserHandler(userModel);
-const authHandler = createUserHandler(authModel);
+const authHandler = createAuthHandler(authModel);
 //middleware
 app.use(bodyParser.json());
 
-app.use('/users'. userHandler);
-app.use('/login', handler);
+app.use('/users', userHandler);
+app.use('/login', authHandler);
 app.get('/', (req, res) => res.send('hello word'));
 
 app.listen(3000, err => {
